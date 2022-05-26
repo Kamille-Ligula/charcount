@@ -1,2 +1,2 @@
-# bizongames
-card games
+# charcount
+Chinese text and vocabulary analysis tool
