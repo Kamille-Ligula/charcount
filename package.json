@@ -1,0 +1,25 @@
+{
+  "name": "charcount",
+  "version": "1.0.0",
+  "description": "charcount",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "Samuel Luc <samuel.luc@hotmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^8.6.0",
+    "excel4node": "^1.7.2",
+    "express": "^4.17.1",
+    "filehound": "^1.17.4",
+    "fs": "0.0.1-security",
+    "mdbg": "^1.73.0",
+    "node-fetch": "^2.6.7",
+    "nodemailer": "^6.7.5",
+    "pg": "^8.7.3",
+    "sequelize": "^6.17.0",
+    "socket.io": "^3.1.2"
+  }
+}

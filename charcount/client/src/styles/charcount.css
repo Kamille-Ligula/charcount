@@ -1,0 +1,299 @@
+body {
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+  overscroll-behavior: contain;
+}
+
+html, body {touch-action: none;} /* NO PINCH ZOOM */
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 40%;
+}
+
+.centerLogin {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transform: translate(0%, -50%);
+  text-align: center;
+  display: block;
+}
+
+button.big {
+	font-size: 28px;
+	border-radius: 6px;
+	padding: 8px 20px;
+  background-color: #5FBD63;
+  color: black;
+  border: none;
+	margin: 2px;
+}
+button.mid {
+	font-size: 20px;
+	border-radius: 4px;
+	padding: 6px 14px;
+  background-color: #5FBD63;
+  color: black;
+  border: none;
+	margin: 2px;
+}
+button.small {
+	/*font-size: 28px;*/
+	border-radius: 3px;
+	padding: 3px;
+  background-color: #5FBD63;
+  color: black;
+  border: none;
+	margin: 2px;
+}
+input.mid {
+	font-size: 20px;
+	border-radius: 4px;
+	padding: 6px 14px;
+  background-color: #5FBD63;
+  color: black;
+  border: none;
+}
+input.small {
+	/*font-size: 28px;*/
+	border-radius: 3px;
+	padding: 3px;
+  background-color: #5FBD63;
+  color: black;
+  border: none;
+	margin: 2px;
+}
+
+button.big:hover {
+  background-color: #28A92C;
+	color: white;
+
+	-webkit-transition: .1.5s ease-in-out;
+	transition: .1.5s ease-in-out;
+}
+button.mid:hover {
+  background-color: #28A92C;
+	color: white;
+
+	-webkit-transition: .1.5s ease-in-out;
+	transition: .1.5s ease-in-out;
+}
+button.small:hover {
+  background-color: #28A92C;
+	color: white;
+
+	-webkit-transition: .1.5s ease-in-out;
+	transition: .1.5s ease-in-out;
+}
+input.mid:hover {
+  background-color: #28A92C;
+	color: white;
+
+	-webkit-transition: .1.5s ease-in-out;
+	transition: .1.5s ease-in-out;
+}
+input.small:hover {
+  background-color: #28A92C;
+	color: white;
+
+	-webkit-transition: .1.5s ease-in-out;
+	transition: .1.5s ease-in-out;
+}
+
+table.center {
+	margin-left: auto;
+	margin-right: auto;
+	width: auto;
+}
+
+.overflowauto {
+	overflow-x: auto;
+  overflow-y: auto;
+	top: 0;
+  bottom:0;
+	width:85%;
+}
+
+.centerDef {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1%;
+  padding-right: 1%;
+  padding-bottom: 1%;
+  padding-top: 1%;
+  max-width: 90vw;
+  max-height: 70vh;
+  overflow-x: auto;
+  overflow-y: auto;
+  border-radius: 8px;
+}
+
+.saveIcon {
+  height: 20px;
+}
+
+.saveIcon:active {
+  transition: all 0.1s ease-out;
+  box-shadow: 0 0px 20px blue;
+}
+
+@media only screen and (max-width: 500px) {
+  html, body {
+    width: 97vw;
+    height: 97vh;
+  }
+}
+@media only screen and (min-width: 501px) {
+  html, body {
+    width: 97vw;
+    height: 97vh;
+  }
+}
+
+textarea {
+	width: 98%;
+	height: 50vh;
+	    /*display: block;
+	    margin-left: auto;
+	    margin-right: auto;*/
+}
+
+#charlist {
+  width: 90%;
+  padding: 4%;
+  margin: auto;
+  text-align: center;
+}
+
+.formated_text {
+  width: 96%;
+  padding-top: 2%;
+  padding-bottom: 2%;
+  padding-right: 2%;
+  padding-left: 2%;
+  margin: auto;
+	overflow-x: auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+#App {
+  font-family: sans-serif;
+
+  /* Give app full page to work with */
+  height: 100vh;
+}
+
+#page-wrap {
+  text-align: center;
+
+  /* Prevent sidebar from showing a scrollbar on page */
+  overflow: auto;
+}
+
+/* Individual item */
+.bm-item {
+  display: inline-block;
+
+  /* Our sidebar item styling */
+  text-decoration: none;
+  margin-bottom: 10px;
+  color: #d1d1d1;
+  transition: color 0.2s;
+}
+
+/* Change color on hover */
+.bm-item:hover {
+  color: white;
+
+	-webkit-transition: .3s ease-in-out;
+	transition: .3s ease-in-out;
+}
+
+/* The rest copied directly from react-burger-menu docs */
+
+/* Position and sizing of burger button */
+.bm-burger-button {
+  position: fixed;
+  width: 36px;
+  height: 30px;
+  left: 10px;
+  top: 10px;
+}
+
+/* Color/shape of burger icon bars */
+.bm-burger-bars {
+  background: #aaa;
+}
+
+/* Position and sizing of clickable cross button */
+.bm-cross-button {
+  height: 24px;
+  width: 24px;
+}
+
+/* Color/shape of close button cross */
+.bm-cross {
+  background: #bdc3c7;
+}
+
+/* General sidebar styles */
+.bm-menu {
+  background: #373a47;
+  padding: 2.5em 1.5em 0;
+  font-size: 1.15em;
+}
+
+/* Morph shape necessary with bubble or elastic */
+.bm-morph-shape {
+  fill: #373a47;
+}
+
+/* Wrapper for item list */
+.bm-item-list {
+  color: #b8b7ad;
+}
+
+/* Styling of overlay */
+.bm-overlay {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+span.underline {
+  background: linear-gradient(180deg,rgba(255,255,255,0) 90%, #000 90%);
+}
