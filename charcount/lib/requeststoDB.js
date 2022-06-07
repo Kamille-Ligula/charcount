@@ -1,5 +1,16 @@
 const {models, sequelize} = require('../src/models');
 
+exports.findRecoveryPassword = async (userId) => {
+  const RecoveryPassword = await models.RecoveryPassword.findAll({
+    where: { userId: userId },
+  });
+
+  return {
+    text: RecoveryPassword[0].text,
+    updatedAt: RecoveryPassword[0].updatedAt,
+  };
+}
+
 exports.findAllKnownCharacters = async (userName) => {
   const user = await models.User.findOne({
     where: { userName: userName },

@@ -54,13 +54,6 @@ const getUserModel = (sequelize, { DataTypes }) => {
           notEmpty: true,
         },
       },
-      /*methodOfAnalysis: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        validate: {
-          notEmpty: true,
-        },
-      },*/
       totalChars: {
         type: DataTypes.INTEGER,
         allowNull: true,
@@ -70,20 +63,10 @@ const getUserModel = (sequelize, { DataTypes }) => {
       },
     },
     { timestamps: false },
-    /*{
-      freezeTableName: true,
-      instanceMethods: {
-        generateHash(password) {
-          return bcrypt.hash(password, bcrypt.genSaltSync(8));
-        },
-        validPassword(password) {
-          return bcrypt.compare(password, this.password);
-        }
-      }
-    }*/
   );
 
   User.associate = (models) => {
+    User.hasMany(models.RecoveryPassword, { onDelete: 'CASCADE' });
     User.hasMany(models.Text, { onDelete: 'CASCADE' });
     User.hasMany(models.CharFrequency, { onDelete: 'CASCADE' });
     User.hasMany(models.HighlightedWord, { onDelete: 'CASCADE' });

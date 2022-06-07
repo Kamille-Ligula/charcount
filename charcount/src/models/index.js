@@ -6,6 +6,7 @@ const {
   getKnownCharacterModel,
   getKnownCharRelationModel,
 } = require('./knownCharacter');
+const {getRecoveryPasswordModel} = require('./recoveryPassword');
 const {getCharFrequencyModel} = require('./charFrequency');
 const {getHighlightedWordModel} = require('./highlightedWord');
 const {
@@ -23,6 +24,7 @@ const sequelize = new Sequelize(
   process.env.CHARCOUNT_DATABASE_PASSWORD,
   {
     dialect: 'postgres',
+    logging: false,
   },
 );
 
@@ -31,6 +33,7 @@ const models = {
   Text: getTextModel(sequelize, Sequelize),
   KnownCharacter: getKnownCharacterModel(sequelize, Sequelize),
   CharFrequency: getCharFrequencyModel(sequelize, Sequelize),
+  RecoveryPassword: getRecoveryPasswordModel(sequelize, Sequelize),
   HighlightedWord: getHighlightedWordModel(sequelize, Sequelize),
   WordWithDefinition: getWordWithDefinitionModel(sequelize, Sequelize),
   CharWithDefinition: getCharWithDefinitionModel(sequelize, Sequelize),

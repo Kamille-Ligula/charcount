@@ -114,6 +114,7 @@ function App(props) {
       const data = {
         userName: sessionStorage.getItem('CharcountUserName'),
         connectionToken: sessionStorage.getItem('CharcountConnectionToken'),
+        connectionType: 'login',
       };
       socket = initiateSocket(data);
       setstart(true);
@@ -151,9 +152,13 @@ function App(props) {
         };
       });
 
-      socket.on('failedConnectionAPI', function(data) {
+      socket.on('ConnectionFeedbackAPI', function(data) {
         socket.disconnect();
         setstart(false);
+        alert(data);
+      });
+
+      socket.on('kickedOut_charcountAPI', function(data) {
         alert(data);
       });
 
@@ -431,12 +436,18 @@ function App(props) {
               setuser={(data) => {
                 socket = initiateSocket(data);
                 setstart(true);
-                //socket.emit('loginCharcount', data)
               }}
               setcreateUser={(data) => {
                 socket = initiateSocket(data);
                 setstart(true);
-                //socket.emit('registerCharcount', data)
+              }}
+              setrecoverUser={(data) => {
+                socket = initiateSocket(data);
+                setstart(true);
+              }}
+              setresetPassword={(data) => {
+                socket = initiateSocket(data);
+                setstart(true);
               }}
             />
           </div>
