@@ -117,6 +117,8 @@ exports = module.exports = async function(io, app, path) {
             if (matchPasswords) {
               socket.connectionToken = data.connectionToken;
 
+              io.to(user.socketid).emit("kickedOut_charcountAPI", 'You can only be connected in one place at a time. You were disconnected from here because you connected elsewhere. If it wasn\'t you please make sure your connection is safe.');
+
               await models.User.update(
                 {
                   socketid: socket.id,

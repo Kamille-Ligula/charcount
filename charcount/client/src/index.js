@@ -160,6 +160,24 @@ function App(props) {
 
       socket.on('kickedOut_charcountAPI', function(data) {
         alert(data);
+
+        socket.disconnect();
+        setstart(false);
+        setuserName();
+        sessionStorage.removeItem('CharcountUserName');
+        setpages(JSON.parse(JSON.stringify(PagesBase)));
+        switchShowElements('new_input')
+
+        settotalChars(0);
+        setcharFrequency([]);
+        setwordsWithDefinitions([]);
+        setcharsWithDefinitions([]);
+        setknownCharacters([]);
+        sethighlightedWordsArray([]);
+        setallowSelection(false);
+        settext();
+        setseachWordData();
+        setshowRecoveryButton(sessionStorage.getItem('showRecoveryButton') || 'false');
       });
 
       socket.on('unlockFeatureAPI', function(data) {
