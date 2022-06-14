@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import '../styles/charcount.css';
 const { createRandomString } = require("../lib/createRandomString");
+const { isEmailValid } = require("../lib/isEmailValid");
 
 export function Register(props) {
   const [userName, setuserName] = useState('');
@@ -12,26 +13,31 @@ export function Register(props) {
   const handleRegister = (event) => {
     event.preventDefault();
 
+    if (!isEmailValid(email)) {
+      alert('The format of your email address is not valid');
+      return;
+    }
+
+    if (confirmEmail !== email) {
+      alert('Emails don\'t match');
+      return;
+    }
+
+    if (confirmPassword !== password) {
+      alert('Passwords don\'t match');
+      return;
+    }
+
     const connectionToken = sessionStorage.getItem('CharcountConnectionToken') || createRandomString(userName, 32, 16, 2);
     sessionStorage.setItem('CharcountConnectionToken', connectionToken);
 
-    if (confirmEmail === email) {
-      if (confirmPassword === password) {
-        props.setcreateUser({
-          userName: userName,
-          email: email,
-          connectionToken: connectionToken,
-          password: password,
-          connectionType: 'register',
-        });
-      }
-      else {
-        alert('Passwords don\'t match')
-      }
-    }
-    else {
-      alert('Emails don\'t match')
-    }
+    props.setcreateUser({
+      userName: userName,
+      email: email,
+      connectionToken: connectionToken,
+      password: password,
+      connectionType: 'register',
+    });
   }
 
   function back() {

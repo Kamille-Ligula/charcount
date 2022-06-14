@@ -1,4 +1,4 @@
-const {models, sequelize} = require('../src/models');
+const {models} = require('../src/models');
 
 exports.findRecoveryPassword = async (userId) => {
   const RecoveryPassword = await models.RecoveryPassword.findAll({
@@ -89,20 +89,6 @@ exports.findAllCharsWithDefinitions = async (userName) => {
   const data = [];
   for (i=0; i<user.CharWithDefinitions.length; i++) {
     data.push(JSON.parse(user.CharWithDefinitions[i].data))
-  }
-
-  return data;
-}
-
-exports.findAllKnownChars = async (userName) => {
-  const user = await models.User.findOne({
-    where: { userName: userName },
-    include: models.KnownCharacter
-  });
-
-  const data = [];
-  for (i=0; i<user.KnownCharacters.length; i++) {
-    data.push(user.KnownCharacters[i].known)
   }
 
   return data;
