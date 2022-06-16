@@ -26,6 +26,7 @@ exports.clientinput = async (socket, data) => {
 
     if (socket.connectionToken === User.connectionToken && socket.id === User.socketid) { // authentication
       if (data && data.newInput && data.newInput.length > 0) {
+        socket.emit('ProgressBarTextAPI', 'Getting tool ready...');
         let charsWithDefinitions;
         let wordsWithDefinitions;
         let text;
@@ -65,11 +66,14 @@ exports.clientinput = async (socket, data) => {
           presentcount = Math.round( totalcount*0.3 );
           socket.emit('ProgressBarAPI', presentcount);
 
-          const wordsData = await searchWords(objectifiedText); // time consuming
-          presentcount = Math.round( totalcount*0.8 );
+          const wordsData = await searchWords(objectifiedText, socket); // time consuming
+          presentcount = Math.round( totalcount*0.7 );
           socket.emit('ProgressBarAPI', presentcount);
 
-          const charsData = await searchCharacters(wordsData.data); // time consuming
+          const charsData = await searchCharacters(wordsData.data, socket); // time consuming
+          socket.emit('ProgressBarTextAPI', `Preparing database (1/2)`);
+          presentcount = Math.round( totalcount*0.8 );
+          socket.emit('ProgressBarAPI', presentcount);
 
           wordsWithDefinitions = wordsData.array//.sort((a,b) => b.count - a.count);
           charsWithDefinitions = charsData.array;
@@ -83,6 +87,9 @@ exports.clientinput = async (socket, data) => {
               JSON.stringify(wordsWithDefinitions[i]),
             );
           }
+          socket.emit('ProgressBarTextAPI', `Preparing database (2/2)`);
+          presentcount = Math.round( totalcount*0.9 );
+          socket.emit('ProgressBarAPI', presentcount);
 
           for (let i=0; i<charsWithDefinitions.length; i++) {
             await newCharWithDefinitionRelation(
@@ -149,6 +156,7 @@ exports.clientinput = async (socket, data) => {
         );
 
         socket.emit('ProgressBarAPI', 21);
+        //socket.emit('ProgressBarTextAPI', '');
 
         const API = {
           text: highlightedText,

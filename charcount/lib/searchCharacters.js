@@ -14,7 +14,7 @@ function compareTones(array, firstTone) {
   return count;
 }
 
-exports.searchCharacters = async (data) => {
+exports.searchCharacters = async (data, socket) => {
   const { getCharacterData } = require("./getCharacterData");
   const { toneExceptions } = require("./toneExceptions");
 
@@ -22,6 +22,8 @@ exports.searchCharacters = async (data) => {
   const characterMemory = [];
 
   for (let i=0; i<data.length; i++) {
+    //console.log(`Analysing single characters' data (${i+1}/${data.length})`)
+    socket.emit('ProgressBarTextAPI', `Analysing single characters' data (${i+1}/${data.length})`);
     for (let j=0; j<data[i].length; j++) {
       if (data[i][j].isChinese && data[i][j].tone === 0) {
         try {

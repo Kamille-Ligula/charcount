@@ -39,6 +39,7 @@ function App(props) {
   const [charsWithDefinitions, setcharsWithDefinitions] = useState([]);
   const [knownCharacters, setknownCharacters] = useState([]);
   const [showProgress, setshowProgress] = useState(progress_bar[1]);
+  const [progressBarText, setprogressBarText] = useState('');
   const [highlightedWordsArray, sethighlightedWordsArray] = useState([]);
   const [allowSelection, setallowSelection] = useState(false);
   const [text, settext] = useState();
@@ -208,6 +209,10 @@ function App(props) {
         }
       });
 
+      socket.on('ProgressBarTextAPI', function(data) {
+        setprogressBarText(data);
+      });
+
       socket.on('disconnect', (reason) => {
         if (reason === 'io server disconnect') {
           socket.connect();
@@ -303,7 +308,12 @@ function App(props) {
               }}
             />}
 
-            {showElements['progress_bar'] && showProgress }
+            {showElements['progress_bar'] &&
+              <div style ={CSS.progress_bar}>
+                {showProgress}
+                <br/>{progressBarText}
+              </div>
+            }
 
             {showElements['characters'] && <CharactersList
               totalChars={totalChars}

@@ -1,8 +1,10 @@
-exports.searchWords = async (data) => {
+exports.searchWords = async (data, socket) => {
   const array = [];
   const wordMemory = [];
 
   for (let i=0; i<data.length; i++) {
+    //console.log(`Analysing words' data (${i+1}/${data.length})`)
+    socket.emit('ProgressBarTextAPI', `Analysing words' data (${i+1}/${data.length})`);
     for (let j=0; j<data[i].length; j++) {
       let combination;
 
