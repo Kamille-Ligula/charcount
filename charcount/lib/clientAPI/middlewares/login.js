@@ -16,7 +16,9 @@ exports.login = async (socket, io) => {
     }
 
     if (!user) {
-      socket.emit('ConnectionFeedbackAPI', 'Wrong identifiers');
+      socket.emit('ConnectionFeedbackAPI', {
+        title: 'wrong identifiers',
+      });
       return;
     }
 
@@ -25,8 +27,9 @@ exports.login = async (socket, io) => {
 
       if (matchPasswords) {
         socket.connectionToken = data.connectionToken;
-
-        io.to(user.socketid).emit("kickedOut_charcountAPI", 'You can only be connected in one place at a time. You were disconnected from here because you connected elsewhere. If it wasn\'t you please make sure your connection is safe.');
+        io.to(user.socketid).emit('ConnectionFeedbackAPI', {
+          title: 'no multi connection allowed',
+        });
 
         await models.User.update(
           {
@@ -56,7 +59,9 @@ exports.login = async (socket, io) => {
     user = await models.User.findByLogin(data.userName);
 
     if (socket.connectionToken !== user.connectionToken || socket.id !== user.socketid) { // authentication
-      socket.emit('ConnectionFeedbackAPI', 'Wrong identifiers');
+      socket.emit('ConnectionFeedbackAPI', {
+        title: 'wrong identifiers',
+      });
       return;
     }
 
@@ -72,6 +77,8 @@ exports.login = async (socket, io) => {
   catch(e) {
     console.log(e)
 
-    socket.emit('ConnectionFeedbackAPI', 'Something went wrong. Try again.');
+    socket.emit('ConnectionFeedbackAPI', {
+      title: 'something went wrong',
+    });
   }
 }

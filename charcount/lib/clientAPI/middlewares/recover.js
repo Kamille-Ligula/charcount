@@ -14,10 +14,9 @@ exports.recover = async (socket) => {
     }
 
     if (!User) {
-      socket.emit(
-        'ConnectionFeedbackAPI',
-        'Your input doesn\'t match any user or email address from the database. Please make sure you didn\'t type it wrong'
-      );
+      socket.emit('ConnectionFeedbackAPI', {
+        title: 'input doesn\'t match user or email',
+      });
       return;
     }
 
@@ -42,11 +41,16 @@ exports.recover = async (socket) => {
       },
     );
 
-    socket.emit('ConnectionFeedbackAPI', 'We sent you a recovery email from the address miranteule@gmail.com to your address '+User.email+'. Please follow the instructions inside in order to recover your account.');
+    socket.emit('ConnectionFeedbackAPI', {
+      title: 'recovery email sent',
+      email: User.email,
+    });
   }
   catch(e) {
     console.log(e)
 
-    socket.emit('ConnectionFeedbackAPI', 'Something went wrong. Try again.');
+    socket.emit('ConnectionFeedbackAPI', {
+      title: 'something went wrong',
+    });
   }
 }

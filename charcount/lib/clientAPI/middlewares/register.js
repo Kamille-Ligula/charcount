@@ -11,7 +11,9 @@ exports.register = async (socket, app) => {
     }
 
     if (!data.userName || !data.email || !data.password) {
-      socket.emit('ConnectionFeedbackAPI', 'Please fill in all the fields.');
+      socket.emit('ConnectionFeedbackAPI', {
+        title: 'no empty field',
+      });
       return;
     }
 
@@ -19,12 +21,16 @@ exports.register = async (socket, app) => {
     const Email = await models.User.findByLogin(data.email);
 
     if (User) {
-      socket.emit('ConnectionFeedbackAPI', 'This name has already been registered to another account.');
+      socket.emit('ConnectionFeedbackAPI', {
+        title: 'name aready registered',
+      });
       return;
     }
 
     if (Email) {
-      socket.emit('ConnectionFeedbackAPI', 'This email address has already been registered to another account.');
+      socket.emit('ConnectionFeedbackAPI', {
+        title: 'email aready registered',
+      });
       return;
     }
 
@@ -50,11 +56,15 @@ exports.register = async (socket, app) => {
       `;
     sendEmail(emailSubject, emailText, data.email);
 
-    socket.emit('ConnectionFeedbackAPI', 'We sent you a confirmation email from the address miranteule@gmail.com. Please follow the instructions inside in order to complete your registration.');
+    socket.emit('ConnectionFeedbackAPI', {
+      title: 'confirmation email sent',
+    });
   }
   catch(e) {
     console.log(e)
 
-    socket.emit('ConnectionFeedbackAPI', 'Something went wrong. Try again.');
+    socket.emit('ConnectionFeedbackAPI', {
+      title: 'something went wrong',
+    });
   }
 }

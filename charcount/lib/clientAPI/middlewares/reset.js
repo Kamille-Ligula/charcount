@@ -14,17 +14,19 @@ exports.reset = async (socket) => {
     }
 
     if (!User) {
-      socket.emit('ConnectionFeedbackAPI', 'Please make sure you didn\'t type your name wrong.');
+      socket.emit('ConnectionFeedbackAPI', {
+        title: 'wrong name',
+      });
       return;
     }
 
     const recoveryPassword = await findRecoveryPassword(User.id);
 
     if (!recoveryPassword || !recoveryPassword.text || recoveryPassword.text.length === 0) {
-      socket.emit(
-        'ConnectionFeedbackAPI',
-        'Please enter the recovery password that was sent to you by email at '+models.User.email+'.'
-      );
+      socket.emit('ConnectionFeedbackAPI', {
+        title: 'enter email recovery password',
+        email: User.email,
+      });
       return;
     }
 
@@ -32,10 +34,9 @@ exports.reset = async (socket) => {
       data.recoveryPassword !== recoveryPassword.text &&
       Date.now() - recoveryPassword.updatedAt.getTime() > recoveryPasswordTimeout.maths
     ) {
-      socket.emit(
-        'ConnectionFeedbackAPI',
-        'Either your recovery password doesn\'t match the one we sent to you by email, or it expired. Remember that recovery passwords are only available for a certain amount of time.'
-      );
+      socket.emit('ConnectionFeedbackAPI', {
+        title: 'password doesn\'t match or expired',
+      });
       return;
     }
 
@@ -46,11 +47,15 @@ exports.reset = async (socket) => {
       {where: {userName: User.userName}},
     );
     await models.RecoveryPassword.destroy({ where: { userId: User.id } });
-    socket.emit('ConnectionFeedbackAPI', 'Your password was successfully reset. You can now use it to sign in.');
+    socket.emit('ConnectionFeedbackAPI', {
+      title: 'password was reset',
+    });
   }
   catch(e) {
     console.log(e)
 
-    socket.emit('ConnectionFeedbackAPI', 'Something went wrong. Try again.');
+    socket.emit('ConnectionFeedbackAPI', {
+      title: 'something went wrong',
+    });
   }
 }

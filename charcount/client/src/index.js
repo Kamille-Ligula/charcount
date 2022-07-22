@@ -8,6 +8,7 @@ import {KnownCharactersList} from './components/KnownCharactersList';
 import {WordsList} from './components/WordsList';
 import {FormatedText} from './components/FormatedText';
 import {FormatedTextBottomTable} from './components/FormatedTextBottomTable';
+import {Options} from './components/Options';
 import {Login} from './components/Login';
 
 import {progress_bar} from './img/index';
@@ -41,12 +42,21 @@ function App(props) {
   const [showProgress, setshowProgress] = useState(progress_bar[1]);
   const [progressBarText, setprogressBarText] = useState('');
   const [highlightedWordsArray, sethighlightedWordsArray] = useState([]);
+
+  const [lightToneColors, setlightToneColors] = useState(
+    ['black', 'red', '#CF8700', 'green', 'blue', '#808080']
+  );
+  const [darkToneColors, setdarkToneColors] = useState(
+    ['#E7E7E7', '#B84545', '#AA8236', '#2B8E2B', '#7070DA', '#9B9B9B']
+  );
+
   const [allowSelection, setallowSelection] = useState(false);
   const [text, settext] = useState();
   const [userName, setuserName] = useState(sessionStorage.getItem('CharcountUserName'));
   const [seachWordData, setseachWordData] = useState();
   const [showRecoveryButton, setshowRecoveryButton] = useState(sessionStorage.getItem('showRecoveryButton') || 'false');
   const [start, setstart] = useState(false);
+  const [accountRecoveryWindow, setaccountRecoveryWindow] = useState(true);
   const [windowWidth, setwindowWidth] = useState(window.innerWidth);
   //const [windowHeight, setwindowHeight] = useState(window.innerHeight);
   const [fontsize, setfontsize] = useState(parseInt(sessionStorage.getItem("fontsizeCharcount")) || 24);
@@ -110,6 +120,26 @@ function App(props) {
     }
   }
 
+  function doDisconnection() {
+    socket.disconnect();
+    setstart(false);
+    setuserName();
+    sessionStorage.removeItem('CharcountUserName');
+    setpages(JSON.parse(JSON.stringify(PagesBase)));
+    switchShowElements('new_input')
+
+    settotalChars(0);
+    setcharFrequency([]);
+    setwordsWithDefinitions([]);
+    setcharsWithDefinitions([]);
+    setknownCharacters([]);
+    sethighlightedWordsArray([]);
+    setallowSelection(false);
+    settext();
+    setseachWordData();
+    setshowRecoveryButton(sessionStorage.getItem('showRecoveryButton') || 'false');
+  }
+
   useEffect(() => {
     if (!socket && !start && sessionStorage.getItem('CharcountUserName') && sessionStorage.getItem('CharcountConnectionToken')) {
       const data = {
@@ -156,29 +186,52 @@ function App(props) {
       socket.on('ConnectionFeedbackAPI', function(data) {
         socket.disconnect();
         setstart(false);
-        alert(data);
-      });
 
-      socket.on('kickedOut_charcountAPI', function(data) {
-        alert(data);
-
-        socket.disconnect();
-        setstart(false);
-        setuserName();
-        sessionStorage.removeItem('CharcountUserName');
-        setpages(JSON.parse(JSON.stringify(PagesBase)));
-        switchShowElements('new_input')
-
-        settotalChars(0);
-        setcharFrequency([]);
-        setwordsWithDefinitions([]);
-        setcharsWithDefinitions([]);
-        setknownCharacters([]);
-        sethighlightedWordsArray([]);
-        setallowSelection(false);
-        settext();
-        setseachWordData();
-        setshowRecoveryButton(sessionStorage.getItem('showRecoveryButton') || 'false');
+        switch (data.title) {
+          case 'recovery email sent':
+            alert('We sent you a recovery email from the address miranteule@gmail.com to your address '+data.email+'. Please follow the instructions inside in order to recover your account.');
+            setaccountRecoveryWindow(false);
+            break;
+          case 'something went wrong':
+            alert('Something went wrong. Try again.');
+            break;
+          case 'input doesn\'t match user or email':
+            alert('Your input doesn\'t match any user or email address from the database. Please make sure you didn\'t type it wrong');
+            break;
+          case 'password was reset':
+            alert('Your password was successfully reset. You can now use it to sign in.');
+            break;
+          case 'password doesn\'t match or expired':
+            alert('Either your recovery password doesn\'t match the one we sent to you by email, or it expired. Remember that recovery passwords are only available for a certain amount of time.');
+            break;
+          case 'enter email recovery password':
+            alert('Please enter the recovery password that was sent to you by email at '+data.email+'.');
+            break;
+          case 'wrong name':
+            alert('Please make sure you didn\'t type your name wrong.');
+            break;
+          case 'confirmation email sent':
+            alert('We sent you a confirmation email from the address miranteule@gmail.com. Please follow the instructions inside in order to complete your registration.');
+            break;
+          case 'email aready registered':
+            alert('This email address has already been registered to another account.');
+            break;
+          case 'no multi connection allowed':
+            alert('You can only be connected in one place at a time. You were disconnected from here because you connected elsewhere. If it wasn\'t you please make sure your connection is safe.');
+            doDisconnection();
+            break;
+          case 'name aready registered':
+            alert('This name has already been registered to another account.');
+            break;
+          case 'no empty field':
+            alert('Please fill in all the fields.');
+            break;
+          case 'wrong identifiers':
+            alert('Wrong identifiers');
+            break;
+          default:
+            console.log('ConnectionFeedbackAPI default case');
+        }
       });
 
       socket.on('unlockFeatureAPI', function(data) {
@@ -205,7 +258,7 @@ function App(props) {
         setshowProgress(progress_bar[data]);
         if (data === 21 || data === null) {
           switchShowElements('characters');
-          setshowProgress(progress_bar[0]);
+          setshowProgress(progress_bar[1]);
         }
       });
 
@@ -361,6 +414,16 @@ function App(props) {
               }
             />}
 
+            {showElements['options'] && <Options
+              theme={theme}
+              isMobile={isMobile}
+              fontsize={fontsize}
+              lightToneColors={lightToneColors}
+              darkToneColors={darkToneColors}
+              setlightToneColors={ (data) => setlightToneColors(data) }
+              setdarkToneColors={ (data) => setdarkToneColors(data) }
+            />}
+
             {showElements['vocabulary'] && <WordsList
               theme={theme}
               wordsWithDefinitions={wordsWithDefinitions}
@@ -384,6 +447,8 @@ function App(props) {
                   key: key+1,
                   userName: userName,
                 }) }
+                lightToneColors={lightToneColors}
+                darkToneColors={darkToneColors}
                 setsearchWord={
                   (data) => {
                     if (data && data.isChinese) {
@@ -434,23 +499,7 @@ function App(props) {
               pages={pages}
               setshowElements={(data) => {
                 if (data === 'disconnect') {
-                  socket.disconnect();
-                  setstart(false);
-                  setuserName();
-                  sessionStorage.removeItem('CharcountUserName');
-                  setpages(JSON.parse(JSON.stringify(PagesBase)));
-                  switchShowElements('new_input')
-
-                  settotalChars(0);
-                  setcharFrequency([]);
-                  setwordsWithDefinitions([]);
-                  setcharsWithDefinitions([]);
-                  setknownCharacters([]);
-                  sethighlightedWordsArray([]);
-                  setallowSelection(false);
-                  settext();
-                  setseachWordData();
-                  setshowRecoveryButton(sessionStorage.getItem('showRecoveryButton') || 'false');
+                  doDisconnection();
                 }
                 else {
                   switchShowElements(data)
@@ -461,6 +510,7 @@ function App(props) {
         :
           <div>
             <Login
+              accountRecoveryWindow = {accountRecoveryWindow}
               setuser={(data) => {
                 socket = initiateSocket(data);
                 setstart(true);

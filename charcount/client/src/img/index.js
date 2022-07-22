@@ -1,5 +1,5 @@
 import React from "react";
-import {CSS} from '../styles/styles';
+//import {CSS} from '../styles/styles';
 
 const progress_bar = [];
 

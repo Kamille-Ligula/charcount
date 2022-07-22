@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {AccountRecovery} from './AccountRecovery';
 import {Register} from './Register';
 import '../styles/charcount.css';
 const { createRandomString } = require("../lib/createRandomString");
 
 export function Login(props) {
+  const [state, setstate] = useState(props);
   const [userName, setuserName] = useState('');
   const [password, setpassword] = useState('');
   const [registration, setregistration] = useState(false);
   const [recovery, setrecovery] = useState(false);
+
+  useEffect(() => {
+    setstate(props);
+  }, [props]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -26,10 +31,6 @@ export function Login(props) {
 
   function turnOnRegistration() {
     setregistration(true);
-  }
-
-  function turnOnRecovery() {
-    setrecovery(true);
   }
 
   return (
@@ -82,7 +83,7 @@ export function Login(props) {
                 </tr>
                 <tr>
                   <td colSpan="2">
-                    <button className='mid' onClick={() => turnOnRecovery()} >Recover account</button>
+                    <button className='mid' onClick={() => setrecovery(true)} >Recover account</button>
                   </td>
                 </tr>
               </tbody>
@@ -103,6 +104,7 @@ export function Login(props) {
         :
           <div>
             <AccountRecovery
+              accountRecoveryWindow = {state.accountRecoveryWindow}
               setrecovery={(data) => setrecovery(data)}
               setrecoverUser={(data) => props.setrecoverUser(data)}
               setresetPassword={(data) => props.setresetPassword(data)}

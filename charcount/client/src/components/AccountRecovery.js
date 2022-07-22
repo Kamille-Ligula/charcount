@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import '../styles/charcount.css';
 
 export function AccountRecovery(props) {
+  const [state, setstate] = useState(props);
   const [emailOrName, setemailOrName] = useState('');
   const [userName, setuserName] = useState('');
   const [recoveryPassword, setrecoveryPassword] = useState('');
   const [password, setpassword] = useState('');
   const [confirmPassword, setconfirmPassword] = useState('');
-  const [recovery, setrecovery] = useState(true);
+
+  useEffect(() => {
+    setstate(props);
+  }, [props]);
 
   const handleRecovery = (event) => {
     event.preventDefault();
@@ -16,8 +20,6 @@ export function AccountRecovery(props) {
       userName: emailOrName,
       connectionType: 'recover',
     });
-
-    setrecovery(false);
   }
 
   const handleResetting = (event) => {
@@ -44,7 +46,7 @@ export function AccountRecovery(props) {
 
   return (
     <div>
-      {recovery ?
+      {state.accountRecoveryWindow ?
         <div>
           <form className="centerLogin" onSubmit={(e) => handleRecovery(e)}>
             <table className='center'>
