@@ -420,7 +420,6 @@ function App(props) {
               setfontsize={(data) => setfontsize(data)}
 
               isMobile={isMobile}
-              fontsize={fontsize}
               lightToneColors={lightToneColors}
               darkToneColors={darkToneColors}
               setlightToneColors={ (data) => setlightToneColors(data) }
