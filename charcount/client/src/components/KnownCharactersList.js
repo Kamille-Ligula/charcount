@@ -28,6 +28,12 @@ export function KnownCharactersList(props) {
   return (
     <div className='formated_text'>
       <p/>
+      There are currently {state.knownCharacters.length} characters in your list of known characters.
+      Clicking on one will send it back to the learning table.
+      <br/>NB: each character variants (commonly known as simplified/traditional characters)
+      are accounted for separately, as knowing one writing doesn't necessarily
+      mean that you can even just recognize the other(s).
+      <p/>
       <div
         id='charlist'
         style={{
@@ -36,12 +42,6 @@ export function KnownCharactersList(props) {
           fontSize: (state.fontsize-6)+'px',
         }}
       >
-        There are currently {state.knownCharacters.length} characters in your list of known characters.
-        Clicking on one will send it back to the learning table.
-        <br/>NB: each character variants (commonly known as simplified/traditional characters)
-        are accounted for separately, as knowing one writing doesn't necessarily
-        mean that you can even just recognize the other(s).
-        <p/>
         {state.knownCharacters.map((value, key) => (
           <span onClick={() => setCharToUnknown(value)} style={{fontSize: (state.fontsize-2)+'px'}} key={key+value}>{value}</span>
         ))}

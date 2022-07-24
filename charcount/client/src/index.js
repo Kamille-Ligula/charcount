@@ -8,7 +8,7 @@ import {KnownCharactersList} from './components/KnownCharactersList';
 import {WordsList} from './components/WordsList';
 import {FormatedText} from './components/FormatedText';
 import {FormatedTextBottomTable} from './components/FormatedTextBottomTable';
-import {Options} from './components/Options';
+import {Settings} from './components/Settings';
 import {Login} from './components/Login';
 
 import {progress_bar} from './img/index';
@@ -27,6 +27,9 @@ import './styles/charcount.css';
 
 let socket;
 
+const lightToneColorsBase = ['black', 'red', '#CF8700', 'green', 'blue', '#808080'];
+const darkToneColorsBase = ['#E7E7E7', '#B84545', '#AA8236', '#2B8E2B', '#7070DA', '#9B9B9B'];
+
 function App(props) {
   const [pages, setpages] = useState(JSON.parse(JSON.stringify(PagesBase)));
   const [theme, settheme] = useState(sessionStorage.getItem("themeCharcount") || 'light');
@@ -43,12 +46,8 @@ function App(props) {
   const [progressBarText, setprogressBarText] = useState('');
   const [highlightedWordsArray, sethighlightedWordsArray] = useState([]);
 
-  const [lightToneColors, setlightToneColors] = useState(
-    ['black', 'red', '#CF8700', 'green', 'blue', '#808080']
-  );
-  const [darkToneColors, setdarkToneColors] = useState(
-    ['#E7E7E7', '#B84545', '#AA8236', '#2B8E2B', '#7070DA', '#9B9B9B']
-  );
+  const [lightToneColors, setlightToneColors] = useState(lightToneColorsBase);
+  const [darkToneColors, setdarkToneColors] = useState(darkToneColorsBase);
 
   const [allowSelection, setallowSelection] = useState(false);
   const [text, settext] = useState();
@@ -414,14 +413,20 @@ function App(props) {
               }
             />}
 
-            {showElements['options'] && <Options
+            {showElements['settings'] && <Settings
               theme={theme}
+              settheme={(data) => settheme(data)}
+              fontsize={fontsize}
+              setfontsize={(data) => setfontsize(data)}
+
               isMobile={isMobile}
               fontsize={fontsize}
               lightToneColors={lightToneColors}
               darkToneColors={darkToneColors}
               setlightToneColors={ (data) => setlightToneColors(data) }
               setdarkToneColors={ (data) => setdarkToneColors(data) }
+              resetLightTones={ () => setlightToneColors(lightToneColorsBase) }
+              resetDarkTones={ () => setdarkToneColors(darkToneColorsBase) }
             />}
 
             {showElements['vocabulary'] && <WordsList

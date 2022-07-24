@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { slide as Menu } from "react-burger-menu";
 import '../styles/charcount.css';
 import {CSS} from '../styles/styles';
+import {logo} from '../img/index';
 
 export default function SideBar(props) {
   const [state, setstate] = useState(props);
@@ -37,16 +38,18 @@ export default function SideBar(props) {
 
   return (
     state.isMobile ?
-      <div style={{
-        backgroundColor: state.theme === 'light' ? '#D9E2FF' : '#02000C',
-        /*borderRadius: '5px',*/
-        width: '100%',
-        height: 50, // a bit more than burger width (36)
-        overflow: 'hidden',
-        marginLeft: '-10px',
-        position: 'fixed',
-        top: 0,
-      }}>
+      <div
+        style={{
+          backgroundColor: state.theme === 'light' ? '#D9E2FF' : '#02000C',
+          /*borderRadius: '5px',*/
+          width: '100%',
+          height: 50, // a bit more than burger width (36)
+          overflow: 'hidden',
+          marginLeft: '-10px',
+          position: 'fixed',
+          top: 0,
+        }}
+      >
         <div
           style={{
             width: '40%',
@@ -94,28 +97,20 @@ export default function SideBar(props) {
           fontSize: '24px',
         }}
       >
-        <p
-          className='noselect'
-          style={{...CSS.themeTogglerPC, float: 'left'}}
-          onClick={themeToggler}
-        >
-          {state.theme==='light' ? <span>🌙</span> : <span>☀️</span>}
-        </p>
-
-        <p
+        <div
           style={{
-            fontSize: '24px',
-            float: 'right',
-            color: state.isMobile ? state.theme === 'light' ? '#02000C' : '#E3FFFC' : '#E3FFFC',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            width: '50%',
+            marginTop: '5%',
           }}
-          className='noselect'
         >
-          <span onClick={() => { changeFontSize('-1') }}>🔻</span>
-            {/*&emsp;*/state.fontsize/*&emsp;*/}
-          <span onClick={() => { changeFontSize('+1') }}>🔺</span>
-        </p>
+          {logo}
+        </div>
 
-        <div style={{marginLeft: '20px', marginTop:'80px'}}>
+        <p/>
+
+        <div style={{marginLeft: '20px'}}>
           {
             Object.entries(state.pages).map(([key, item]) => (
               <div style={{color: state.colorElements[item.address]}} key={key} onClick={() => { props.setshowElements(item.address); }}>

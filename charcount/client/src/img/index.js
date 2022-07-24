@@ -1,5 +1,5 @@
 import React from "react";
-//import {CSS} from '../styles/styles';
+import {CSS} from '../styles/styles';
 
 const progress_bar = [];
 
@@ -12,3 +12,4 @@ for (let i=0; i<=21; i++) {
 export {progress_bar};
 
 export const saveIcon = <img className='saveIcon' src={'/charcount/img/saveIcon.png'} alt={''}/>;
+export const logo = <img style={{height: 'auto', width: 'auto'}} alt={''} src={'/charcount/img/logocharcount.png'} alt={''}/>;

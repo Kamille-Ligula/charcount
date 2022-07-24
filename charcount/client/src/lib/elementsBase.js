@@ -10,9 +10,9 @@ export const PagesBase = {
     name: 'Known characters',
     address: 'known_characters',
   },
-  'Options': {
-    name: 'Options',
-    address: 'options',
+  'Settings': {
+    name: 'Settings',
+    address: 'settings',
   },
   'Disconnect': {
     name: 'Disconnect',
@@ -27,7 +27,7 @@ export const ShowElementsBase = {
   characters: false,
   progress_bar: false,
   known_characters: false,
-  options: false,
+  settings: false,
   disconnect: false,
 };
 
@@ -37,6 +37,6 @@ export const ColorElementsBase = {
   vocabulary:'#E3FFFC',
   characters:'#E3FFFC',
   known_characters:'#E3FFFC',
-  options:'#E3FFFC',
+  settings:'#E3FFFC',
   disconnect:'#E3FFFC',
 };
