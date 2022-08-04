@@ -14,10 +14,10 @@ export const PagesBase = {
     name: 'Settings',
     address: 'settings',
   },
-  'Disconnect': {
+  /*'Disconnect': {
     name: 'Disconnect',
     address: 'disconnect',
-  },
+  },*/
 };
 
 export const ShowElementsBase = {
@@ -28,7 +28,7 @@ export const ShowElementsBase = {
   progress_bar: false,
   known_characters: false,
   settings: false,
-  disconnect: false,
+  //disconnect: false,
 };
 
 export const ColorElementsBase = {
@@ -38,5 +38,5 @@ export const ColorElementsBase = {
   characters:'#E3FFFC',
   known_characters:'#E3FFFC',
   settings:'#E3FFFC',
-  disconnect:'#E3FFFC',
+  //disconnect:'#E3FFFC',
 };

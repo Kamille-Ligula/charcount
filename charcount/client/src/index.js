@@ -11,28 +11,35 @@ import {FormatedTextBottomTable} from './components/FormatedTextBottomTable';
 import {Settings} from './components/Settings';
 import {Login} from './components/Login';
 
-import {progress_bar} from './img/index';
+import {
+  progress_bar,
+  disconnectIcon
+} from './img/index';
 
 import { ThemeProvider } from "styled-components";
 import { GlobalStyles } from "./lib/globalStyles";
 
-import { PagesBase } from "./lib/elementsBase";
-import { ShowElementsBase } from "./lib/elementsBase";
-import { ColorElementsBase } from "./lib/elementsBase";
+import {
+  PagesBase,
+  ShowElementsBase,
+  ColorElementsBase,
+} from "./lib/elementsBase";
 
 import { initiateSocket } from "./lib/initiateSocket";
 
 import {CSS} from './styles/styles';
 import './styles/charcount.css';
 
-let socket;
+const {
+  lightToneColorsBase,
+  darkToneColorsBase
+} = require("./lib/toneColorsBase");
 
-const lightToneColorsBase = ['black', 'red', '#CF8700', 'green', 'blue', '#808080'];
-const darkToneColorsBase = ['#E7E7E7', '#B84545', '#AA8236', '#2B8E2B', '#7070DA', '#9B9B9B'];
+let socket;
 
 function App(props) {
   const [pages, setpages] = useState(JSON.parse(JSON.stringify(PagesBase)));
-  const [theme, settheme] = useState(sessionStorage.getItem("themeCharcount") || 'light');
+  const [theme, settheme] = useState(localStorage.getItem("themeCharcount") || 'light');
 
   const [showElements, setshowElements] = useState({});
   const [colorElements, setcolorElements] = useState({});
@@ -58,7 +65,7 @@ function App(props) {
   const [accountRecoveryWindow, setaccountRecoveryWindow] = useState(true);
   const [windowWidth, setwindowWidth] = useState(window.innerWidth);
   //const [windowHeight, setwindowHeight] = useState(window.innerHeight);
-  const [fontsize, setfontsize] = useState(parseInt(sessionStorage.getItem("fontsizeCharcount")) || 24);
+  const [fontsize, setfontsize] = useState(parseInt(localStorage.getItem("fontsizeCharcount")) || 24);
 
   //let isVertical: boolean = (windowWidth/windowHeight < 1);
   let isMobile: boolean = (windowWidth <= 500);
@@ -244,6 +251,15 @@ function App(props) {
         setknownCharacters(data);
       });
 
+      socket.on('toneColorsAPI', function(data) {
+        if (data.lightToneColors) {
+          setlightToneColors(data.lightToneColors);
+        }
+        if (data.darkToneColors) {
+          setdarkToneColors(data.darkToneColors);
+        }
+      });
+
       socket.on('userLoggedInAPI', function(data) {
         setuserName(data);
         sessionStorage.setItem('CharcountUserName', data);
@@ -416,16 +432,60 @@ function App(props) {
             {showElements['settings'] && <Settings
               theme={theme}
               settheme={(data) => settheme(data)}
+
               fontsize={fontsize}
               setfontsize={(data) => setfontsize(data)}
 
               isMobile={isMobile}
               lightToneColors={lightToneColors}
               darkToneColors={darkToneColors}
-              setlightToneColors={ (data) => setlightToneColors(data) }
-              setdarkToneColors={ (data) => setdarkToneColors(data) }
-              resetLightTones={ () => setlightToneColors(lightToneColorsBase) }
-              resetDarkTones={ () => setdarkToneColors(darkToneColorsBase) }
+
+              setlightToneColors={
+                (data) => {
+                  setlightToneColors(data);
+                  socket.emit('saveSettings', {
+                    userName: userName,
+                    type: 'toneColors',
+                    theme: 'light',
+                    reset: false,
+                    toneColors: data,
+                  });
+                }
+              }
+              setdarkToneColors={
+                (data) => {
+                  setdarkToneColors(data);
+                  socket.emit('saveSettings', {
+                    userName: userName,
+                    type: 'toneColors',
+                    theme: 'dark',
+                    reset: false,
+                    toneColors: data,
+                  });
+                }
+              }
+              resetLightTones={
+                () => {
+                  setlightToneColors(lightToneColorsBase);
+                  socket.emit('saveSettings', {
+                    userName: userName,
+                    type: 'toneColors',
+                    theme: 'light',
+                    reset: true,
+                  });
+                }
+              }
+              resetDarkTones={
+                () => {
+                  setdarkToneColors(darkToneColorsBase);
+                  socket.emit('saveSettings', {
+                    userName: userName,
+                    type: 'toneColors',
+                    theme: 'dark',
+                    reset: true,
+                  });
+                }
+              }
             />}
 
             {showElements['vocabulary'] && <WordsList
@@ -443,56 +503,55 @@ function App(props) {
             />}
 
             {showElements['formated_text'] &&
-            <div>
-              <FormatedText
-                text={text}
-                settext={ (text) => settext(text) }
-                settrunkateAt={ (key) => socket.emit('trunkateAt', {
-                  key: key+1,
-                  userName: userName,
-                }) }
-                lightToneColors={lightToneColors}
-                darkToneColors={darkToneColors}
-                setsearchWord={
-                  (data) => {
-                    if (data && data.isChinese) {
-                      socket.emit('searchWordInText', {
-                        searchWord: data,
-                        userName: userName,
-                      })
-                    }
-                    else {
-                      setseachWordData(null);
+              <div>
+                <FormatedText
+                  text={text}
+                  settext={ (text) => settext(text) }
+                  settrunkateAt={ (key) => socket.emit('trunkateAt', {
+                    key: key+1,
+                    userName: userName,
+                  }) }
+                  lightToneColors={lightToneColors}
+                  darkToneColors={darkToneColors}
+                  setsearchWord={
+                    (data) => {
+                      if (data && data.isChinese) {
+                        socket.emit('searchWordInText', {
+                          searchWord: data,
+                          userName: userName,
+                        })
+                      }
+                      else {
+                        setseachWordData(null);
+                      }
                     }
                   }
-                }
-                seachWordData={seachWordData}
-                isMobile={isMobile}
-                theme={theme}
-                fontsize={fontsize}
-                allowSelection={allowSelection}
-                wordsWithDefinitions={wordsWithDefinitions}
-                charsWithDefinitions={charsWithDefinitions}
-                highlightedWordsArray={highlightedWordsArray}
-              />
-              <FormatedTextBottomTable
-                wordsWithDefinitions={wordsWithDefinitions}
-                charsWithDefinitions={charsWithDefinitions}
-                isMobile={isMobile}
-                theme={theme}
-                fontsize={fontsize}
-                setnewhighlightedWord={(data) => {sendNewHighlightedWord(data)}}
-                allowSelection={allowSelection}
-                setallowSelection={(data) => {setallowSelection(data)}}
-              />
-            </div>
-          }
+                  seachWordData={seachWordData}
+                  isMobile={isMobile}
+                  theme={theme}
+                  fontsize={fontsize}
+                  allowSelection={allowSelection}
+                  wordsWithDefinitions={wordsWithDefinitions}
+                  charsWithDefinitions={charsWithDefinitions}
+                  highlightedWordsArray={highlightedWordsArray}
+                />
+                <FormatedTextBottomTable
+                  wordsWithDefinitions={wordsWithDefinitions}
+                  charsWithDefinitions={charsWithDefinitions}
+                  isMobile={isMobile}
+                  theme={theme}
+                  fontsize={fontsize}
+                  setnewhighlightedWord={(data) => {sendNewHighlightedWord(data)}}
+                  allowSelection={allowSelection}
+                  setallowSelection={(data) => {setallowSelection(data)}}
+                />
+              </div>
+            }
 
             {!showElements['progress_bar'] && <SideBar
               pageWrapId={"page-wrap"}
               outerContainerId={"App"}
               theme={theme}
-              settheme={(data) => settheme(data)}
               fontsize={fontsize}
               setfontsize={(data) => setfontsize(data)}
               windowWidth={windowWidth}
@@ -502,14 +561,27 @@ function App(props) {
               colorElements={colorElements}
               pages={pages}
               setshowElements={(data) => {
-                if (data === 'disconnect') {
-                  doDisconnection();
-                }
-                else {
-                  switchShowElements(data)
-                }
+                switchShowElements(data)
               }}
             />}
+
+            <div
+              style={{
+                position: 'fixed',
+                top: isMobile && '10px',
+                bottom: !isMobile && '10px',
+                right: isMobile && '10px',
+                left: !isMobile && '10px',
+                height: '30px',
+                width: '30px',
+                filter: isMobile ? theme === 'dark' && 'invert(100%)' : 'invert(100%)',
+              }}
+              onClick={() => {
+                doDisconnection();
+              }}
+            >
+              {disconnectIcon}
+            </div>
           </div>
         :
           <div>

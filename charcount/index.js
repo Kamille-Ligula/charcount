@@ -11,6 +11,7 @@ const { saveToJSON } = require("./lib/clientAPI/saveToJSON");
 const { saveToXLSX } = require("./lib/clientAPI/saveToXLSX");
 const { searchWordInText } = require("./lib/clientAPI/searchWordInText");
 const { trunkateAt } = require("./lib/clientAPI/trunkateAt");
+const { saveSettings } = require("./lib/clientAPI/saveSettings");
 
 // middlewares
 const { register } = require("./lib/clientAPI/middlewares/register");
@@ -71,6 +72,10 @@ exports = module.exports = async function(io, app, path) {
 
     socket.on('newhighlightedWord', async (data) => {
       newhighlightedWord(socket, data)
+    })
+
+    socket.on('saveSettings', async (data) => {
+      saveSettings(socket, data)
     })
   });
 }

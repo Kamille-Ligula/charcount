@@ -68,7 +68,7 @@ export function Settings(props) {
         </div>
       }
 
-      <div style={{ fontSize: state.fontsize*1.5+'px' }}>Settings</div>
+      <div style={{ fontSize: state.fontsize*1.5+'px' }}>Browser settings</div>
       <hr/>
 
       {/* Text size */}
@@ -96,6 +96,9 @@ export function Settings(props) {
       </span>
 
       <p/>
+
+      <div style={{ fontSize: state.fontsize*1.5+'px' }}>Account settings</div>
+      <hr/>
       {/* Tone colors */}
       <span style={{ fontSize: state.fontsize*1.1+'px', fontWeight: 'bold' }}>Tones' colors:</span>
       &nbsp;<button className='small noselect' onClick={() => {

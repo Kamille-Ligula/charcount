@@ -2,6 +2,11 @@ const {models} = require('../../../src/models');
 const bcrypt = require('bcrypt');
 
 const {
+  lightToneColorsBase,
+  darkToneColorsBase
+} = require("../../../client/src/lib/toneColorsBase");
+
+const {
   findAllKnownCharacters
 } = require("../../requeststoDB");
 
@@ -10,6 +15,18 @@ exports.login = async (socket, io) => {
     const data = JSON.parse(socket.handshake.auth.token);
 
     let user = await models.User.findByLogin(data.userName);
+
+    if (user.lighttonecolors && user.darktonecolors) { // populate the tone colors in the database
+      if (user.lighttonecolors.length === 0 || user.darktonecolors.length === 0) { // populate the tone colors in the database
+        await models.User.update(
+          {
+            lighttonecolors: lightToneColorsBase,
+            darktonecolors: darkToneColorsBase,
+          },
+          {where: {userName: data.userName}},
+        );
+      }
+    }
 
     if (data.connectionType !== 'login') {
       return;
@@ -69,6 +86,10 @@ exports.login = async (socket, io) => {
     const textExists = await models.Text.findOne({ where: { userId: user.id }, });
 
     socket.emit('KnownCharactersAPI', knownChars);
+    socket.emit('toneColorsAPI', {
+      lightToneColors: user.lighttonecolors,
+      darkToneColors: user.darktonecolors
+    });
     socket.emit('userLoggedInAPI', data.userName);
     if (textExists) {
       socket.emit('unlockFeatureAPI', 'RecoveryButton');

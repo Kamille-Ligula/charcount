@@ -61,6 +61,21 @@ const getUserModel = (sequelize, { DataTypes }) => {
           notEmpty: true,
         },
       },
+
+      lighttonecolors: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true,
+        validate: {
+          notEmpty: true,
+        },
+      },
+      darktonecolors: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true,
+        validate: {
+          notEmpty: true,
+        },
+      },
     },
     { timestamps: false },
   );

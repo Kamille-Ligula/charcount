@@ -29,13 +29,6 @@ export default function SideBar(props) {
     }
   }
 
-  const themeToggler = () => {
-    let newTheme;
-    props.theme === 'light' ? newTheme = 'dark' : newTheme = 'light'
-    props.settheme(newTheme);
-    localStorage.setItem("themeCharcount", newTheme);
-  }
-
   return (
     state.isMobile ?
       <div
@@ -67,14 +60,6 @@ export default function SideBar(props) {
           <span onClick={() => { changeFontSize('+1') }}>🔺</span>
         </div>
 
-        <div
-          className='noselect'
-          style={{...CSS.themeToggler}}
-          onClick={themeToggler}
-        >
-          {state.theme==='light' ? <span>🌙</span> : <span>☀️</span>}
-        </div>
-
         <Menu isOpen={menuOpen} onOpen={handleOnOpen} onClose={handleOnClose} width={'auto'} {...props}>
           {
             Object.entries(state.pages).map(([key, item]) => (
@@ -85,7 +70,7 @@ export default function SideBar(props) {
           }
         </Menu>
       </div>
-    :
+    : /* is computer */
       <div
         className='overflowauto noselect'
         style={{
@@ -103,6 +88,7 @@ export default function SideBar(props) {
             marginRight: 'auto',
             width: '50%',
             marginTop: '5%',
+            //filter: state.theme === 'dark' && 'invert(60%)',
           }}
         >
           {logo}
